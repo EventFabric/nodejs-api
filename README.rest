@@ -8,7 +8,7 @@ Setup
 
 If you want to use the library you can install it with npm::
 
-    npm install eventfabric
+    npm install
 
 Usage
 -----
