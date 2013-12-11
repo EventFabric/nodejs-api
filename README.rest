@@ -1,0 +1,58 @@
+Event Fabric API Client
+=======================
+
+Nodejs implementation of Event Fabric API to send events.
+
+Setup
+-----
+
+If you want to use the library you can install it with npm::
+
+    npm install eventfabric
+
+Usage
+-----
+
+see the examples folder for more usage examples
+
+::
+
+    var ef = require('./eventfabric');
+    var client = ef.client("your_username", "your_password");
+
+    function onLoginSuccess (data) {
+        var value = {
+            "text": "cpu",
+            "percentage": Math.random() * 100
+        };
+
+        function onEventSent(status, data) {
+            var eventSent = JSON.parse(data);
+            console.log("event sent", status, eventSent);
+        }
+
+        function onEventFail (status, res) {
+            console.error("event error", status, res);
+        }
+
+        client.sendEvent(value, "your_channel", onEventSent, onEventFail);
+    }
+
+    function onLoginFail(err) {
+        console.error("login error", err);
+    }
+
+    client.login(onLoginSuccess, onLoginFail);
+
+
+Test
+----
+
+::
+
+    nodejs test.js
+
+License
+-------
+
+MIT

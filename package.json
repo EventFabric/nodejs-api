@@ -1,0 +1,32 @@
+{
+    "name": "eventfabric",
+    "version": "0.1.0",
+    "homepage": "http://www.event-fabric.com/",
+    "description": "Event Fabric Client API",
+    "main": "./index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/EventFabric/nodejs-api"
+    },
+    "keywords": [
+        "nodejs",
+        "eventfabric",
+        "ef"
+    ],
+    "author": {
+        "name": "Javier Dall' Amore",
+        "email": "javier@event-fabric.com",
+        "url":   "http://www.gnandoo.com"
+    },
+    "dependencies": {
+    },
+    "devDependencies": {
+    },
+    "licenses": [{
+        "type": "MIT",
+        "url": "https://github.com/EventFabric/nodejs-api/blob/master/LICENSE.txt"
+    }]
+}
