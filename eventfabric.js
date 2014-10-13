@@ -1,4 +1,4 @@
-/*global require, exports*/
+/*global require, exports, Buffer*/
 
 /**
  * Copyright (c) 2013 Javier Dall' Amore <javier@event-fabric.com>
@@ -40,7 +40,7 @@ eventfabric.client = function (username, password, root_url) {
     }
 
     root_url = root_url || "https://event-fabric.com/api/";
-    root_url = root_url[-1] === '/' ? root_url : root_url + "/";
+    root_url = root_url[root_url.length - 1] === '/' ? root_url : root_url + "/";
 
     function request(path, body, successCb, failCb) {
         var req, reqUrl = url.parse(endpoint(path)),
@@ -51,7 +51,8 @@ eventfabric.client = function (username, password, root_url) {
                 headers: {
                     'Cookie': cookie,
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+                    'Content-Length': Buffer.byteLength(JSON.stringify(body), 'utf8')
                 },
                 method: 'POST'
             };
@@ -59,7 +60,9 @@ eventfabric.client = function (username, password, root_url) {
         req = http.request(settings);
 
         req.on('response', function (res) {
-            cookie = res.headers['set-cookie'];
+            if (path === "session") {
+                cookie = res.headers['set-cookie'];
+            }
             res.body = '';
             res.setEncoding('utf-8');
 
