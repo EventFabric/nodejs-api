@@ -1,7 +1,13 @@
-var ef = require('./eventfabric');
-var client = ef.client("your_username", "your_password");
+/*global console, require*/
+var ef = require('./eventfabric'),
+username = "admin",
+password = "secret",
+url = "http://localhost:8080/",
+channel = "my.channel",
+client = ef.client(username, password, url);
 
 function onLoginSuccess (data) {
+    "use strict";
     var value = {
         "text": "cpu",
         "percentage": Math.random() * 100
@@ -16,10 +22,11 @@ function onLoginSuccess (data) {
         console.error("event error", status, res);
     }
 
-    client.sendEvent(value, "your_channel", onEventSent, onEventFail);
+    client.sendEvent(value, channel, onEventSent, onEventFail);
 }
 
 function onLoginFail(err) {
+    "use strict";
     console.error("login error", err);
 }
 

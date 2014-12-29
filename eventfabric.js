@@ -30,7 +30,7 @@ var eventfabric = exports;
 eventfabric.version = "0.1.0";
 eventfabric.client = function (username, password, root_url) {
     "use strict";
-    var cookie, credentials = {
+    var token, credentials = {
         "username": username,
         "password": password
     };
@@ -39,7 +39,7 @@ eventfabric.client = function (username, password, root_url) {
         return root_url + path;
     }
 
-    root_url = root_url || "https://event-fabric.com/api/";
+    root_url = root_url || "https://event-fabric.com/";
     root_url = root_url[root_url.length - 1] === '/' ? root_url : root_url + "/";
 
     function request(path, body, successCb, failCb) {
@@ -49,7 +49,7 @@ eventfabric.client = function (username, password, root_url) {
                 port: reqUrl.port || 80,
                 path: reqUrl.pathname,
                 headers: {
-                    'Cookie': cookie,
+                    'x-session': token,
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
                     'Content-Length': Buffer.byteLength(JSON.stringify(body), 'utf8')
@@ -60,9 +60,6 @@ eventfabric.client = function (username, password, root_url) {
         req = http.request(settings);
 
         req.on('response', function (res) {
-            if (path === "session") {
-                cookie = res.headers['set-cookie'];
-            }
             res.body = '';
             res.setEncoding('utf-8');
 
@@ -71,7 +68,11 @@ eventfabric.client = function (username, password, root_url) {
             });
 
             res.on('end', function () {
+                var body = JSON.parse(res.body);
                 if (res.statusCode === 201) {
+                    if (path === "sessions") {
+                        token = body.token;
+                    }
                     successCb(res.statusCode, res.body);
                 } else {
                     failCb(res.statusCode, res.message);
@@ -88,14 +89,12 @@ eventfabric.client = function (username, password, root_url) {
     }
 
     function login(successCb, failCb) {
-        request("session", credentials, successCb, failCb);
+        request("sessions", credentials, successCb, failCb);
     }
 
-    function sendEvent(value, channel, successCb, failCb) {
-        request("event", {
-            "channel": channel,
-            "value": value
-        }, successCb, failCb);
+    function sendEvent(value, channel, successCb, failCb, user) {
+        var path = "streams/" + (user || username) + "/" + channel + "/";
+        request(path, value, successCb, failCb);
     }
 
     return {
