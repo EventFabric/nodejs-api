@@ -92,9 +92,10 @@ eventfabric.client = function (username, password, root_url) {
         request("sessions", credentials, successCb, failCb);
     }
 
-    function sendEvent(value, channel, successCb, failCb, user) {
-        var path = "streams/" + (user || username) + "/" + channel + "/";
-        request(path, value, successCb, failCb);
+    function sendEvent(event, successCb, failCb, user) {
+        var bucket = event.bucket || "_user_" + username,
+            path = "streams/" + bucket + "/" + event.channel + "/";
+        request(path, event.value, successCb, failCb);
     }
 
     return {

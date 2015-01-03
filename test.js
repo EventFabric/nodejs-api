@@ -22,7 +22,10 @@ function onLoginSuccess (data) {
         console.error("event error", status, res);
     }
 
-    client.sendEvent(value, channel, onEventSent, onEventFail);
+    client.sendEvent({
+        value: value,
+        channel: channel
+    }, onEventSent, onEventFail);
 }
 
 function onLoginFail(err) {

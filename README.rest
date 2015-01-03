@@ -35,7 +35,10 @@ see the examples folder for more usage examples
             console.error("event error", status, res);
         }
 
-        client.sendEvent(value, "your_channel", onEventSent, onEventFail);
+        client.sendEvent({
+            value: value,
+            channel: "your_channel"
+        }, onEventSent, onEventFail);
     }
 
     function onLoginFail(err) {
